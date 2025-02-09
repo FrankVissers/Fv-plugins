@@ -1,0 +1,23 @@
+{
+    "name":"fv-welcomer",
+    "id":"fv-welcomer",
+    "version":"1.0.0",
+    "startFile":"index.ts",
+
+    "enabled":true,
+    "priority":0,
+    "events":[],
+
+    "npmDependencies":[],
+    "requiredPlugins":[],
+    "incompatiblePlugins":[],
+
+    "details":{
+        "author":"FV.dev",
+        "shortDescription":"A simple plugin to welcome members",
+        "longDescription":"A simple plugin to welcome members",
+        "imageUrl":"",
+        "projectUrl":"",
+        "tags":["welcomer","custom"]
+    }
+}
