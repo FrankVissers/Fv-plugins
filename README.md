@@ -3,7 +3,7 @@
 <p align="center">
 This repository is a collection of all plugins made for the projects powered by Open Discord. At the moment, only <a href="https://otgithub.dj-dj.be"><b>Open Ticket</b></a> is available.
 Every plugin can be installed in the <code>./plugins/</code> directory of the project it is made for.
-All plugins are checked for malicious code, bugs & errors before being listed here! If you need any help, feel free to join our <a href="https://discord.dj-dj.be">discord server</a>!
+All plugins are checked for malicious code, bugs & errors before being listed here! If you need any help, feel free to join our <a href="https://discord.com/invite/8mj9C8XWnq">discord server</a>!
 </p>
 
 <p align="center"><b>⭐️ Help us grow by giving a star! ⭐️</b></p>
