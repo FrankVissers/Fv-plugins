@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>Error</title>
-</head>
-<body>
-<pre>Cannot GET /projects/Fv-welcomer/code/fv-welcomer/Readme.md</pre>
-</body>
-</html>
+# Fv-welcomer
+plugin to add in your all in one bot(openticket) to welcome a user
+
+you can change the mebed message in index.ts for help contact me https://fv.dev.qreen.tech
+
+> this only works with open ticket 
