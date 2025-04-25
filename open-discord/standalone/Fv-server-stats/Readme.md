@@ -18,7 +18,7 @@ This plugin:
 ## ⚙️ Installation
 
 1. Add `fv-welcomer` to your bot project in the "plugins" folder.
-2. Customize the stats and channel names in `fv-server-stats.config.json`.
+2. Customize the stats and channel names in `config.json`.
 3. Still have questions or errors? You can report them at [our discord](fv.dev.qreen.tech)
 
 
