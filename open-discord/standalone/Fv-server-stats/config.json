@@ -1,0 +1,45 @@
+{
+    "enabled": true,
+
+
+
+    "category": {
+        "name": "📊 Server Stats",
+        "position": 0
+    },
+    
+    "channels": {
+        "totalMembers": {
+            "format": "👥 All members: {count}",
+            "enabled": true
+        },
+        "humanMembers": {
+            "format": "👥 Human members: {count}",
+            "enabled": true
+        },
+        "humanMembersgoal": {
+            "format": "⏱️ goal: 20",
+            "enabled": true
+        },
+        "bots": {
+            "format": "🤖 Bots: {count}",
+            "enabled": true
+        },
+        "boostLevel": {
+            "format": " 🎉 level {level}",
+            "enabled": true
+        },
+        "boostCount": {
+            "format": "🌟 Boosts: {count}",
+            "enabled": true
+        },
+        "link": {
+            "format": "🔗 https://fv.dev.qreen.tech/",
+            "enabled": true
+        },
+        "code": {
+            "format": "code: example",
+            "enabled": true
+        }
+    }
+}  
