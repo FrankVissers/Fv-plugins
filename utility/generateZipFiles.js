@@ -2,60 +2,53 @@ const archiver = require("archiver");
 const fs = require("fs");
 const path = require("path");
 
-const pluginsDir = "./standalone";
-const tempDir = "./zips";
+// Read plugin directories, ignoring hidden files like .DS_Store
+const plugins = fs.readdirSync("./open-discord/standalone").filter((p) => !p.startsWith("."));
 
-// Zorg dat de tijdelijke map bestaat
+// Remove existing zip files
+for (const plugin of plugins) {
+    const zipPath = path.join("open-discord", "standalone", plugin, `${plugin}.zip`);
+    if (fs.existsSync(zipPath)) {
+        fs.rmSync(zipPath);
+    }
+}
+console.log("Removed old zip files!");
+
+// Ensure temp directory exists
+const tempDir = path.join("temp-open-discord", "standalone");
 if (!fs.existsSync(tempDir)) {
-    fs.mkdirSync(tempDir);
+    fs.mkdirSync(tempDir, { recursive: true });
 }
 
-// // Haal plugin-mappen op (behalve .DS_Store etc.)
-// const plugins = fs.readdirSync(pluginsDir).filter(
-//     (p) => p !== ".DS_Store" && fs.statSync(path.join(pluginsDir, p)).isDirectory()
-// );
+let counter = 0;
+for (const plugin of plugins) {
+    const tempZipPath = path.join(tempDir, `${plugin}.zip`);
+    const finalZipPath = path.join("open-discord", "standalone", plugin, `${plugin}.zip`);
+    const pluginDir = path.join("open-discord", "standalone", plugin);
 
-const plugins = ['Fv-welcomer'];
+    const output = fs.createWriteStream(tempZipPath);
+    const archive = archiver("zip", { zlib: { level: 9 } });
 
-console.log("📦 Start met zippen van plugins...");
+    output.on("close", () => {
+        console.log(`Wrote ${archive.pointer()} bytes for plugin: ${plugin}`);
+        fs.copyFileSync(tempZipPath, finalZipPath);
+        counter++;
 
-(async () => {
-    for (const plugin of plugins) {
-        const pluginPath = path.join(pluginsDir, plugin);
-        const zipName = `${plugin}.zip`;
-        const zipTempPath = path.join(tempDir, zipName);
-        const zipFinalPath = path.join(pluginPath, zipName);
-
-        // Verwijder oude zip (indien aanwezig)
-        if (fs.existsSync(zipFinalPath)) {
-            fs.rmSync(zipFinalPath);
+        if (counter === plugins.length) {
+            fs.rmSync("temp-open-discord", { recursive: true, force: true });
+            console.log("Finished!");
         }
+    });
 
-        const output = fs.createWriteStream(zipTempPath);
-        const archive = archiver("zip", { zlib: { level: 9 } });
+    archive.on("warning", (err) => {
+        console.warn("Archive warning:", err);
+    });
 
-        archive.on("error", (err) => {
-            throw err;
-        });
+    archive.on("error", (err) => {
+        throw err;
+    });
 
-        output.on("close", () => {
-            console.log(`✅ ${plugin}: ${archive.pointer()} bytes geschreven.`);
-            fs.copyFileSync(zipTempPath, zipFinalPath);
-        });
-
-        archive.pipe(output);
-
-        // Alleen zippen als er bestanden in zitten
-        const files = fs.readdirSync(pluginPath).filter((f) => f !== zipName);
-        if (files.length === 0) {
-            console.log(`⚠️ ${plugin}: map is leeg, overslaan...`);
-            continue;
-        }
-
-        archive.directory(pluginPath, false);
-        await archive.finalize();
-    }
-
-    fs.rmSync(tempDir, { recursive: true, force: true });
-    console.log("🎉 Klaar! Alle plugins gezipt.");
-})();
+    archive.pipe(output);
+    archive.directory(pluginDir, false);
+    archive.finalize();
+}
