@@ -2,46 +2,60 @@ const archiver = require("archiver");
 const fs = require("fs");
 const path = require("path");
 
-const plugins = fs.readdirSync("./open-ticket").filter((p) => p != ".DS_Store");
-for (const plugin of plugins) {
-    // Remove existing zip files
-    if (fs.existsSync("./open-ticket/" + plugin + "/" + plugin + ".zip")) {
-        fs.rmSync("./open-ticket/" + plugin + "/" + plugin + ".zip");
-    }
+const pluginsDir = "./standalone";
+const tempDir = "./zips";
+
+// Zorg dat de tijdelijke map bestaat
+if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir);
 }
-if (!fs.existsSync("./temp-open-ticket/")) {
-    fs.mkdirSync("./temp-open-ticket/");
-}
-console.log("Removed old zip files!");
 
-let counter = 0;
-for (const plugin of plugins) {
-    // Create zip file stream
-    const output = fs.createWriteStream(path.join(process.cwd(), "./temp-open-ticket/" + plugin + ".zip"));
-    const archive = archiver("zip", { zlib: { level: 9 } });
+// // Haal plugin-mappen op (behalve .DS_Store etc.)
+// const plugins = fs.readdirSync(pluginsDir).filter(
+//     (p) => p !== ".DS_Store" && fs.statSync(path.join(pluginsDir, p)).isDirectory()
+// );
 
-    // Error handling
-    output.on("close", () => {
-        console.log("Wrote " + archive.pointer() + " bytes for plugin: " + plugin);
-        fs.copyFileSync("./temp-open-ticket/" + plugin + ".zip", "./open-ticket/" + plugin + "/" + plugin + ".zip");
-        counter++;
+const plugins = ['Fv-welcomer'];
 
-        if (counter === plugins.length) {
-            fs.rmSync("./temp-open-ticket/", { force: true, recursive: true });
-            console.log("Finished!");
+console.log("📦 Start met zippen van plugins...");
+
+(async () => {
+    for (const plugin of plugins) {
+        const pluginPath = path.join(pluginsDir, plugin);
+        const zipName = `${plugin}.zip`;
+        const zipTempPath = path.join(tempDir, zipName);
+        const zipFinalPath = path.join(pluginPath, zipName);
+
+        // Verwijder oude zip (indien aanwezig)
+        if (fs.existsSync(zipFinalPath)) {
+            fs.rmSync(zipFinalPath);
         }
-    });
-    archive.on("warning", (err) => {
-        console.log(err);
-    });
-    archive.on("error", (err) => {
-        throw err;
-    });
 
-    // Pipe zip archive to output file
-    archive.pipe(output);
+        const output = fs.createWriteStream(zipTempPath);
+        const archive = archiver("zip", { zlib: { level: 9 } });
 
-    // Append files
-    archive.directory(path.join(process.cwd(), "./open-ticket/" + plugin + "/"), false);
-    archive.finalize();
-}
+        archive.on("error", (err) => {
+            throw err;
+        });
+
+        output.on("close", () => {
+            console.log(`✅ ${plugin}: ${archive.pointer()} bytes geschreven.`);
+            fs.copyFileSync(zipTempPath, zipFinalPath);
+        });
+
+        archive.pipe(output);
+
+        // Alleen zippen als er bestanden in zitten
+        const files = fs.readdirSync(pluginPath).filter((f) => f !== zipName);
+        if (files.length === 0) {
+            console.log(`⚠️ ${plugin}: map is leeg, overslaan...`);
+            continue;
+        }
+
+        archive.directory(pluginPath, false);
+        await archive.finalize();
+    }
+
+    fs.rmSync(tempDir, { recursive: true, force: true });
+    console.log("🎉 Klaar! Alle plugins gezipt.");
+})();
