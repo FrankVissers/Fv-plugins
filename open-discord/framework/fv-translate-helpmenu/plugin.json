@@ -1,0 +1,23 @@
+{
+    "name": "FV Translate Helpmenu",
+    "id": "fv-translate-helpmenu",
+    "version": "2.0.0",
+    "startFile": "index.ts",
+
+    "enabled": true,
+    "priority": 99,
+    "events": [],
+
+    "npmDependencies": [],
+    "requiredPlugins": ["ot-translate-cmds"],
+    "incompatiblePlugins": [],
+
+    "details": {
+        "author": "Open Ticket",
+        "shortDescription": "Synchroniseert automatisch vertalingen van ot-translate-cmds naar het helpmenu.",
+        "longDescription": "Deze plugin leest de vertalingen van ot-translate-cmds en past deze automatisch toe op de commando-namen en opties in het helpmenu, zodat deze overeenkomen met de daadwerkelijke slash commands.",
+        "imageUrl": "",
+        "projectUrl": "",
+        "tags": ["help", "translate", "menu", "synchronization"]
+    }
+}
