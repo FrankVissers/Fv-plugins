@@ -1,0 +1,15 @@
+{
+  "welcomeChannelId": "1518989982872895498",
+  "embedColor": "#0099ff",
+  "bannerUrl": "https://fv.dev.qreen.tech/fotos/standard.gif",
+  "button": {
+    "label": "View our website",
+    "url": "https://fv.dev.qreen.tech"
+  },
+  "messages": {
+    "mentionText": "Welcome to the server, {member}! 🎉",
+    "embedTitle": "Welcome to the server, {username}! 🎉",
+    "embedDescription": "Hey {member}, we're glad to have you here! You are member #{memberCount}!",
+    "footerText": "Enjoy your stay!"
+  }
+}
