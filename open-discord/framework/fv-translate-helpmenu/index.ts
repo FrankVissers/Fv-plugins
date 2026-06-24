@@ -14,7 +14,7 @@ interface OTTranslateCmdsConfigCommand {
 }
 
 // Config
-class OTTranslateHelpConfig extends api.ODJsonConfig {
+class OTTranslateHelpConfig extends api.ODJsonConfig<{ locale: string }> {
     declare data: {
         locale: string
     }
