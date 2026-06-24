@@ -4,7 +4,7 @@ import { ChannelType, REST, Routes, SlashCommandBuilder } from "discord.js";
 import * as fs from "fs";
 import * as path from "path";
 
-if (utilities.project != "openticket") throw new api.ODPluginError("This plugin only works in Open Ticket!");
+if (opendiscord.project != "openticket") throw new api.ODPluginError("This plugin only works in Open Ticket!");
 
 
 interface ChannelConfig {
